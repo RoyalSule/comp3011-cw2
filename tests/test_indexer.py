@@ -79,22 +79,22 @@ class TestIndexTokens:
 
     def test_frequency_counted_correctly(self):
         tokens = ["the", "cat", "sat", "on", "the", "mat"]
-        self.indexer._index_tokens("https://example.com/", tokens)
+        self.indexer._add_to_index("https://example.com/", tokens)
         assert self.indexer.index["the"]["https://example.com/"]["frequency"] == 2
 
     def test_positions_recorded(self):
         tokens = ["the", "cat", "the"]
-        self.indexer._index_tokens("https://example.com/", tokens)
+        self.indexer._add_to_index("https://example.com/", tokens)
         assert self.indexer.index["the"]["https://example.com/"]["positions"] == [0, 2]
 
     def test_unique_words_get_own_entry(self):
         tokens = ["alpha", "beta", "gamma"]
-        self.indexer._index_tokens("https://example.com/", tokens)
+        self.indexer._add_to_index("https://example.com/", tokens)
         assert set(self.indexer.index.keys()) == {"alpha", "beta", "gamma"}
 
     def test_multiple_pages_same_word(self):
-        self.indexer._index_tokens("https://example.com/a", ["dog"])
-        self.indexer._index_tokens("https://example.com/b", ["dog", "cat"])
+        self.indexer._add_to_index("https://example.com/a", ["dog"])
+        self.indexer._add_to_index("https://example.com/b", ["dog", "cat"])
         assert len(self.indexer.index["dog"]) == 2
 
 class TestBuild:
@@ -170,21 +170,21 @@ class TestQueryHelpers:
         }
         self.indexer.build(pages)
 
-    def test_get_word_entry_found(self):
-        entry = self.indexer.get_word_entry("the")
+    def test_get_entry_found(self):
+        entry = self.indexer.get_entry("the")
         assert entry is not None
         assert len(entry) == 2
 
-    def test_get_word_entry_case_insensitive(self):
-        assert self.indexer.get_word_entry("THE") == self.indexer.get_word_entry("the")
+    def test_get_entry_case_insensitive(self):
+        assert self.indexer.get_entry("THE") == self.indexer.get_entry("the")
 
-    def test_get_word_entry_not_found_returns_none(self):
-        assert self.indexer.get_word_entry("zzznonsense") is None
+    def test_get_entry_not_found_returns_none(self):
+        assert self.indexer.get_entry("zzznonsense") is None
 
-    def test_get_pages_for_word_returns_set(self):
-        pages = self.indexer.get_pages_for_word("fox")
+    def test_get_pages_returns_set(self):
+        pages = self.indexer.get_pages("fox")
         assert isinstance(pages, set)
         assert "https://example.com/a" in pages
 
-    def test_get_pages_for_word_missing_returns_empty_set(self):
-        assert self.indexer.get_pages_for_word("zzzmissing") == set()
+    def test_get_pages_missing_returns_empty_set(self):
+        assert self.indexer.get_pages("zzzmissing") == set()

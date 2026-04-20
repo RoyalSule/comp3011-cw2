@@ -8,7 +8,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 from indexer import Indexer
-from src.search import SearchEngine
+from search import SearchEngine
 
 def build_engine(pages: dict[str, str]) -> SearchEngine:
     """Convenience: build an Indexer from pages and wrap it in a SearchEngine."""
@@ -46,7 +46,7 @@ class TestPrintWord:
 
     def test_missing_word_returns_not_found_message(self):
         output = self.engine.print_word("zzznonsense")
-        assert "not found" in output.lower()
+        assert "wasn't found" in output
 
     def test_case_insensitive(self):
         lower = self.engine.print_word("world")
@@ -55,11 +55,11 @@ class TestPrintWord:
 
     def test_empty_string_returns_error(self):
         output = self.engine.print_word("")
-        assert "error" in output.lower()
+        assert "Please enter" in output
 
     def test_whitespace_only_returns_error(self):
         output = self.engine.print_word("   ")
-        assert "error" in output.lower()
+        assert "Please enter" in output
 
 class TestFindPagesSingleTerm:
     def setup_method(self):
@@ -118,11 +118,11 @@ class TestFindPagesEdgeCases:
 
     def test_empty_query_returns_error(self):
         output = self.engine.find_pages("")
-        assert "error" in output.lower()
+        assert "Please enter" in output
 
     def test_whitespace_only_query_returns_error(self):
         output = self.engine.find_pages("   ")
-        assert "error" in output.lower()
+        assert "Please enter" in output
 
     def test_punctuation_stripped_from_query(self):
         with_punct = self.engine.find_pages("world.")
