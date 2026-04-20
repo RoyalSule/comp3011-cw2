@@ -31,7 +31,7 @@ The tool is split into three independent modules:
 git clone https://github.com/<your-username>/<repo-name>.git
 cd <repo-name>
 
-# 2. (Recommended) Create a virtual environment
+# 2. Create a virtual environment
 python -m venv .venv
 source .venv/bin/activate   # Windows: .venv\Scripts\activate
 
@@ -64,7 +64,7 @@ Crawls the website, builds the inverted index, and saves it to `data/index.json`
 ---
 
 #### `load`
-Loads a previously saved index from `data/index.json`. Must run `build` at least once first.
+Loads a previously saved index from `data/index.json`. Only needs to be run once after `build` — use this for all subsequent sessions.
 
 ```
 > load
@@ -82,16 +82,15 @@ Displays the inverted index entry for a single word, showing every page it appea
 
 **Example output:**
 ```
-Index entry for 'world':
-  Appears on 2 page(s)
+Results for 'world' (2 page(s)):
 
-  URL      : https://quotes.toscrape.com/
-  Frequency: 3
-  Positions: [4, 22, 87]
+  URL       : https://quotes.toscrape.com/
+  Frequency : 3
+  Positions : [4, 22, 87]
 
-  URL      : https://quotes.toscrape.com/page/2/
-  Frequency: 1
-  Positions: [11]
+  URL       : https://quotes.toscrape.com/page/2/
+  Frequency : 1
+  Positions : [11]
 ```
 
 ---
